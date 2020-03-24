@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="23.33dp"
+    android:layout_gravity="center_vertical"
+    android:gravity="center_vertical"
+    android:orientation="horizontal">
+
+    <com.cvte.maxhub.mailfield.TouchTextView
+            android:id="@+id/tv_tag_item_contain"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"/>
+
+    <TextView
+        android:id="@+id/tv_tag_item_delete"
+        android:layout_width="14dp"
+        android:layout_height="14dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
+        android:layout_marginEnd="4dp"
+        android:layout_gravity="center_vertical"
+        android:visibility="gone"/>
+
+</LinearLayout>

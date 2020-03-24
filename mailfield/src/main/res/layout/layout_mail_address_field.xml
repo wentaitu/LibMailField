@@ -1,0 +1,25 @@
+<com.cvte.maxhub.mailfield.MaxHeightScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/tag_scrollview"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:scrollbarSize="2.67dp"
+    android:scrollbars="vertical"
+    android:scrollbarThumbVertical="@drawable/email_scrollbar_thumb_vertical"
+    android:background="@drawable/email_scrollview_focus_back"
+    android:padding="0.5dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="2.17dp">
+
+        <com.cvte.maxhub.mailfield.EmailTagView
+            android:id="@+id/tagViewEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical" />
+
+    </LinearLayout>
+
+</com.cvte.maxhub.mailfield.MaxHeightScrollView>

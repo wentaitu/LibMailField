@@ -1,0 +1,2 @@
+include ':demo', ':mailfield'
+rootProject.name='LibMailField'

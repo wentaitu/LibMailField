@@ -1,0 +1,18 @@
+<com.cvte.maxhub.mailfield.EmailAutoCompleteTextView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/email_AutoCompleteView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center_vertical"
+    android:background="@null"
+    android:focusable="true"
+    android:stateListAnimator="@null"
+    android:gravity="center_vertical"
+    android:imeOptions="actionDone|flagNoExtractUi"
+    android:inputType="textEmailAddress"
+    android:singleLine="true"
+    android:textCursorDrawable="@drawable/email_input_text_cursor"
+    android:textSize="14sp"
+    android:dropDownSelector="#189bf0"
+    android:dropDownVerticalOffset="5dp"
+    android:textColorHint="#BBBBBB" />
