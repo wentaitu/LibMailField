@@ -8,8 +8,19 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
 import android.widget.ScrollView
+import com.cvte.maxhub.mailfield.bean.EmailTag
+import com.cvte.maxhub.mailfield.config.MailFieldConfig
+import com.cvte.maxhub.mailfield.view.EmailAutoCompleteTextView
+import com.cvte.maxhub.mailfield.view.MaxHeightScrollView
 import kotlinx.android.synthetic.main.layout_mail_address_field.view.*
 
+/**
+ * @author: linrunyu
+ * @email linrunyu@cvte.com
+ * @date 2019-09-20
+ * @description: 继承邮件地址框TagView，实现外部调用公共方法
+ * 如：添加地址、获取所有地址、清空地址等
+ */
 class EmailTagView @JvmOverloads
         constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
     TagView(context, attrs, defStyleAttr),
@@ -20,6 +31,13 @@ class EmailTagView @JvmOverloads
 
     private var mAutoTv: EmailAutoCompleteTextView = this.mailAutoCompleteTextView
     private var mTagChangeListener: OnTagChangeListener? = null
+
+    /**
+     * 供外部监听当前所有Tag数量，地址是否合理
+     */
+    interface OnTagChangeListener {
+        fun onTagChange(count: Int,  hasInvalidTag: Boolean)
+    }
 
     init {
         setTagListener(this)
@@ -58,7 +76,7 @@ class EmailTagView @JvmOverloads
      * 获取Tag个数
      */
     fun getTagCount(): Int {
-        return tags?.size?:0
+        return tags.size
     }
 
     /**
@@ -68,11 +86,12 @@ class EmailTagView @JvmOverloads
         return tags.any { !it.isEmailOk }
     }
 
-    /**
-     * 设置邮箱内容改变监听
-     */
     fun setOnTagChangeListener(listener: OnTagChangeListener) {
         mTagChangeListener = listener
+    }
+
+    fun getAutoTv() : EmailAutoCompleteTextView {
+        return mAutoTv
     }
 
     private val mAutoCompleteTextWatch = object : TextWatcher {
@@ -112,19 +131,14 @@ class EmailTagView @JvmOverloads
         mAutoTv.removeTextChangedListener(mAutoCompleteTextWatch)
     }
 
-    override fun onTagAdd(tag: String) {
-        addNewEmailTag(tag)
-        updateEmailTagStatus()
-    }
-
     /**
      * 当mAutoTv无输入，点击任意Tag，Tag删除，字符串转入AutoCompleteTextView
      */
     override fun onTagClick(tag: EmailTag, position: Int) {
-        // 此变量无作用，若回调时mAutoTv有输入，可记录已输入值直接生成新Tag，被点击Tag处于可编辑状态
+        // 此变量预留，若回调时mAutoTv有输入，可记录已输入值直接生成新Tag，被点击Tag处于可编辑状态
         var str = mAutoTv.text.toString()
-        if (!TextUtils.isEmpty(str) && str.indexOf('@') == -1 && EmailAutoCompleteTextView.MAIL_SUFFIXS.isNotEmpty()) {
-            str += EmailAutoCompleteTextView.MAIL_SUFFIXS[0]
+        if (!TextUtils.isEmpty(str) && str.indexOf('@') == -1 && MailFieldConfig.MAIL_SUFFIXS.isNotEmpty()) {
+            str += MailFieldConfig.MAIL_SUFFIXS[0]
         }
 
         // 若有邮件后缀，则恢复可编辑状态时去掉后缀
@@ -133,12 +147,17 @@ class EmailTagView @JvmOverloads
         } else {
             mAutoTv.setText(tag.text)
         }
-        mAutoTv.setSelection(tag.text.length - mAutoTv.recipientLimit.length)
+        mAutoTv.setSelection(mAutoTv.text.length)
         removeNoRefresh(position)
         val result = addNewEmailTag(str)
         if (!result) {
             refresh()
         }
+        updateEmailTagStatus()
+    }
+
+    override fun onTagAdd(tag: String) {
+        addNewEmailTag(tag)
         updateEmailTagStatus()
     }
 
@@ -205,9 +224,9 @@ class EmailTagView @JvmOverloads
             var scrollView = tagViewEmail.parent.parent as MaxHeightScrollView
             if (hasFocus) {
                 mAutoTv.setRecipientLimit(mRecipientLimit, MailFieldConfig.TAG_ADDRESS_SUFFIX_LIMITATION_TEXT_COLOR)
-                scrollView.setBackgroundResource(MailFieldConfig.TAG_ON_FOCUS_CHANGE_SCROLLVIEW_BG_RES_ID)
+                scrollView.setBackgroundResource(MailFieldConfig.TAG_ON_FOCUS_SCROLLVIEW_BG_RES_ID)
             } else {
-                scrollView.setBackgroundResource(MailFieldConfig.TAG_ON_OUT_FOCUS_CHANGE_SCROLLVIEW_BG_RES_ID)
+                scrollView.setBackgroundResource(MailFieldConfig.TAG_ON_OUT_FOCUS_SCROLLVIEW_BG_RES_ID)
                 if (tags.isNotEmpty()) {
                     mAutoTv.setRecipientLimit(null, MailFieldConfig.TAG_ADDRESS_SUFFIX_LIMITATION_TEXT_COLOR)
                 }
@@ -241,10 +260,6 @@ class EmailTagView @JvmOverloads
 
     private fun updateEmailTagStatus() {
         mTagChangeListener?.onTagChange(getTagCount(), hasInvalidTag())
-    }
-
-    interface OnTagChangeListener {
-        fun onTagChange(count: Int,  hasInvalidTag: Boolean)
     }
 
 }

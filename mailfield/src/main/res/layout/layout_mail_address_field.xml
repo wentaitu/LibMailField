@@ -1,4 +1,4 @@
-<com.cvte.maxhub.mailfield.MaxHeightScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.cvte.maxhub.mailfield.view.MaxHeightScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/tag_scrollview"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -18,8 +18,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:gravity="center_vertical" />
+            android:gravity="center_vertical"
+            android:minHeight="21.33dp"/>
 
     </LinearLayout>
 
-</com.cvte.maxhub.mailfield.MaxHeightScrollView>
+</com.cvte.maxhub.mailfield.view.MaxHeightScrollView>

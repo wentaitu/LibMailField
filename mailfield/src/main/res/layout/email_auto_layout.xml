@@ -1,4 +1,4 @@
-<com.cvte.maxhub.mailfield.EmailAutoCompleteTextView
+<com.cvte.maxhub.mailfield.view.EmailAutoCompleteTextView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/email_AutoCompleteView"
     android:layout_width="match_parent"
