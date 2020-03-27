@@ -1,14 +1,19 @@
 ## MailField 邮件输入框控件
 
-***
-邮件发送页面输入框控件，用于邮件地址输入，邮件地址错误检查，控件类名 EmailTagView
+#### 1.简介
 
+邮件发送页面输入框控件，用于邮件地址输入，邮件地址错误检查，获取输入地址等
+[GitLab地址](https://gitlab.gz.cvte.cn/i_tuwentai/libmailfield) :https://gitlab.gz.cvte.cn/i_tuwentai/libmailfield
 <center class="half">    
   <img src="./MailField1.gif" height="250"/><img src="./MailField2.gif" height="250"/>
 </center>
 
 
-#### 使用：`<include layout="@layout/layout_mail_address_field"/>`
+#### 2.使用方式
+
+##### 控件主类名 EmailTagView，使用方法如下：
+
+`<include layout="@layout/layout_mail_address_field"/>`
 
 | EmailTagView | 外部使用方法                                          | 方法说明                                                |
 | ------------ | ----------------------------------------------------- | ------------------------------------------------------- |
@@ -22,7 +27,8 @@
 | 8            | clear()                                               | 清空输入框所有内容                                      |
 | 9            | destroy()                                             | 释放资源                                                |
 
-#### 输入框可配置项：
+##### 输入框可配置项：
+可通过MailFieldConfig配置控件属性
 
 ```kotlin
 object MailFieldConfig {
@@ -80,23 +86,25 @@ object MailFieldConfig {
 }
 ```
 
-#### 布局：
+#### 3.实现原理
+
+##### 布局：
 
 ![邮件输入框布局](./MailField3.jpeg)
 
-（1）最外层采用ScrollView为了使达到最大高度时变为滑动；
+###### （1）最外层采用ScrollView为了使达到最大高度时变为滑动；
 
-（2）第二层加入LinearLayout作为ScrollView子布局，同时便于边缘距离比内部多一倍；
+###### （2）第二层加入LinearLayout作为ScrollView子布局，同时便于边缘距离比内部多一倍；
 
-（3）第三层采用RelativeLayout为了使用其子View便于对齐的特性，如ALIGN_TOP、ALIGN_BOTTOM
+###### （3）第三层采用RelativeLayout为了使用其子View便于对齐的特性，如ALIGN_TOP、ALIGN_BOTTOM
 
-#### 邮件Tag对齐
+##### 邮件Tag对齐
 
-##### （1）边界padding 0.5dp避免内部Tag或者滑动条遮挡背景框
+###### （1）边界padding 0.5dp避免内部Tag或者滑动条遮挡背景框
 
-##### （2）Linearlayout padding 2.17dp 外边框距离内部Tag多添加一倍宽度
+###### （2）Linearlayout padding 2.17dp 外边框距离内部Tag多添加一倍宽度
 
-##### （3）For循环中根据所有地址列表，一次性添加所有地址View
+###### （3）For循环中根据所有地址列表，一次性添加所有地址View
 
 ​         每个Tag设置setId(id)，用于后一个Tag与前一个对齐，同时记录每行第一个Tag ID，用以右、下Tag对齐；
 
@@ -108,7 +116,7 @@ object MailFieldConfig {
 
 ​         注：total为本行已添加Tag宽度加上Tag之间margin、mWidth为EmailTagView宽度;
 
-##### （4）所有Tag绘制完在尾部添加AutoCompleteTextView
+###### （4）所有Tag绘制完在尾部添加AutoCompleteTextView
 
 ​         无邮件地址Tag，仅设置left、right Margin；
 
@@ -118,6 +126,6 @@ object MailFieldConfig {
 
 ​         动态换行时监听输入长度，处于整行则不换行（即第一次输入或已被添加到整行），换行时添加left Margin.
 
-#### 类图
+##### 类图
 
 ![类图](./MailField4.png)
