@@ -53,11 +53,12 @@ object MailFieldConfig {
     var AutoCompleteTextView_ITEM_TEXT_COLOR = Color.parseColor("#898989")
     var AutoCompleteTextView_TEXT_SIZE = DEFAULT_TAG_TEXT_SIZE
     var AutoCompleteTextView_TEXT_COLOR = Color.parseColor("#262626")
-    var TAG_ADDRESS_SUFFIX_LIMITATION_TEXT_COLOR = Color.parseColor("#BBBBBB")
+    var AutoCompleteTextView_HEIGHT = 21.33f
     // 是否需要显示邮件下拉列表，是：则显示MAIL_SUFFIXS中的后缀
-    val NEED_SHOW_AUTO_COMPLETE = true
+    val NEED_SHOW_AUTO_COMPLETE = false
     var MAIL_SUFFIXS = arrayOf("@cvte.com", "@qq.com", "@163.com", "@gmail.com")
     // MaxHeightScrollView默认最高高度
     var SCROLLVIEW_MAX_HEIGHT = 104f
+    var TAG_ADDRESS_SUFFIX_LIMITATION_TEXT_COLOR = Color.parseColor("#BBBBBB")
 
 }

@@ -235,7 +235,7 @@ class EmailTagView @JvmOverloads
     }
 
     /**
-     * 邮件输入框焦点，若存在输入则自动生成邮件地址Tag
+     * 设置邮件输入框失去焦点，若存在输入则自动生成邮件地址Tag
      */
     fun changeFocusAutoAddTag() {
         if (!TextUtils.isEmpty(mAutoTv.text.toString())) {

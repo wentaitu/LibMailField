@@ -13,11 +13,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView.OnItemClickListener
 import android.widget.ArrayAdapter
-import android.widget.AutoCompleteTextView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.appcompat.widget.AppCompatAutoCompleteTextView
 import com.cvte.maxhub.mailfield.R
 import com.cvte.maxhub.mailfield.config.MailFieldConfig
+import kotlin.math.abs
 
 /**
  * @author tuwentai
@@ -27,13 +28,12 @@ import com.cvte.maxhub.mailfield.config.MailFieldConfig
  */
 class EmailAutoCompleteTextView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
-) : AutoCompleteTextView(context, attrs, defStyleAttr) {
+) : AppCompatAutoCompleteTextView(context, attrs, defStyleAttr) {
 
     private var mListener: OnAutoCompleteClickListener? = null
     private var mLengthListener: OnAutoCompleteTextLengthListener? = null
     private var mEmailAutoAdapt: EmailAutoCompleteAdapter? = null
     var recipientLimit: String? = null
-    private var mBeforeChangedText = ""
     private var mRecipientLimitColor = 0
     private var mFilterRegex  = Regex("^[a-zA-Z0-9_]+$")
 
@@ -66,12 +66,7 @@ class EmailAutoCompleteTextView @JvmOverloads constructor(
         mLengthListener = listener
     }
 
-    fun refreshBeforeChangedText() {
-        postDelayed(mRefreshTextRunnable, 200L)
-    }
-
     fun destroy() {
-        removeCallbacks(mRefreshTextRunnable)
         removeTextChangedListener(mTextWatcher)
     }
 
@@ -131,7 +126,6 @@ class EmailAutoCompleteTextView @JvmOverloads constructor(
     private fun itemClick(text: String) {
         if (mListener != null) {
             mListener!!.onItemClick(text)
-            refreshBeforeChangedText()
         }
     }
 
@@ -167,10 +161,9 @@ class EmailAutoCompleteTextView @JvmOverloads constructor(
 
     private fun delete(keyCode: Int, event: KeyEvent) {
         if (keyCode == KeyEvent.KEYCODE_DEL && event.action == KeyEvent.ACTION_UP) {
-            if (mListener != null && TextUtils.isEmpty(mBeforeChangedText)) {
+            if (mListener != null && TextUtils.isEmpty(text)) {
                 mListener!!.onDelete()
             }
-            mBeforeChangedText = text.toString()
         }
     }
 
@@ -188,9 +181,8 @@ class EmailAutoCompleteTextView @JvmOverloads constructor(
         paint.color = mRecipientLimitColor
         val width = paint.measureText(text.toString())
         val fontMetrics = paint.fontMetrics
-        val y =
-            height / 2 + (Math.abs(fontMetrics.ascent) - fontMetrics.descent) / 2
-        canvas.drawText(recipientLimit, paddingLeft + width, y, paint)
+        val y = height / 2 + (abs(fontMetrics.ascent) - fontMetrics.descent) / 2
+        canvas.drawText(recipientLimit!!, paddingLeft + width, y, paint)
         paint.color = oldColor
     }
 
@@ -234,13 +226,9 @@ class EmailAutoCompleteTextView @JvmOverloads constructor(
         destroy()
     }
 
-    private val mRefreshTextRunnable = Runnable {
-        mBeforeChangedText = text.toString()
-    }
-
     private val mTextWatcher: TextWatcher = object : TextWatcher {
         override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
-            mBeforeChangedText = s.toString()
+            // nop
         }
 
         override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
@@ -262,6 +250,10 @@ class EmailAutoCompleteTextView @JvmOverloads constructor(
         }
     }
 
+    /**
+     * NEED_SHOW_AUTO_COMPLETE为true时下拉列表Adapter
+     * @constructor
+     */
     private inner class EmailAutoCompleteAdapter(
         context: Context, layoutId: Int, pEmails: Array<String>
     ) : ArrayAdapter<String>(context, layoutId, pEmails) {

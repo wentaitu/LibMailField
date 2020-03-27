@@ -151,12 +151,7 @@ open class TagView @JvmOverloads constructor(
         mailAutoCompleteTextView.requestFocus()
     }
 
-    override fun onSizeChanged(
-        width: Int,
-        height: Int,
-        oldWidth: Int,
-        oldHeight: Int
-    ) {
+    override fun onSizeChanged(width: Int, height: Int, oldWidth: Int, oldHeight: Int) {
         super.onSizeChanged(width, height, oldWidth, oldHeight)
         mWidth = width
     }
@@ -300,7 +295,7 @@ open class TagView @JvmOverloads constructor(
      * @param leftId Int 本行结尾Tag id
      */
     private fun addAutoCompleteTextViewToRight(topId: Int, leftId: Int) {
-        mAutoCompleteParams = LayoutParams(LayoutParams.MATCH_PARENT, dpToPx(context, 20.33f))
+        mAutoCompleteParams = LayoutParams(LayoutParams.MATCH_PARENT, dpToPx(context, MailFieldConfig.AutoCompleteTextView_HEIGHT))
         mAutoCompleteParams!!.rightMargin = tagMargin
         // mAutoCompleteParams.bottomMargin = lineMargin;
         mAutoCompleteParams!!.addRule(ALIGN_TOP, topId)
@@ -317,7 +312,7 @@ open class TagView @JvmOverloads constructor(
      * @param bottomId Int 本行头部Tag id
      */
     private fun addAutoCompleteTextViewToBelow(bottomId: Int) {
-        mAutoCompleteParams = LayoutParams(LayoutParams.MATCH_PARENT, dpToPx(context, 20.33f))
+        mAutoCompleteParams = LayoutParams(LayoutParams.MATCH_PARENT, dpToPx(context, MailFieldConfig.AutoCompleteTextView_HEIGHT))
         mAutoCompleteParams!!.leftMargin = tagMargin
         mAutoCompleteParams!!.rightMargin = tagMargin
         // mAutoCompleteParams.bottomMargin = lineMargin;
@@ -332,7 +327,7 @@ open class TagView @JvmOverloads constructor(
      * TagView初始化时首次添加AutoCompleteTextView
      */
     private fun initAddAutoCompleteTextView() {
-        mAutoCompleteParams = LayoutParams(LayoutParams.MATCH_PARENT, dpToPx(context, 20.33f))
+        mAutoCompleteParams = LayoutParams(LayoutParams.MATCH_PARENT, dpToPx(context, MailFieldConfig.AutoCompleteTextView_HEIGHT))
         mAutoCompleteParams!!.leftMargin = tagMargin
         mAutoCompleteParams!!.rightMargin = tagMargin
         addView(mailAutoCompleteTextView, mAutoCompleteParams)
@@ -390,7 +385,6 @@ open class TagView @JvmOverloads constructor(
     fun addTag(tag: EmailTag) {
         mTags.add(tag)
         drawTags()
-        mailAutoCompleteTextView.refreshBeforeChangedText()
     }
 
     fun addTags(tags: Array<String>?) {
@@ -408,6 +402,10 @@ open class TagView @JvmOverloads constructor(
     val tags: MutableList<EmailTag>
         get() = mTags
 
+    fun setTagListener(tagListener: TagListener?) {
+        mTagListener = tagListener
+    }
+
     /**
      * remove TAG
      * @param position
@@ -421,15 +419,17 @@ open class TagView @JvmOverloads constructor(
         mTags.removeAt(position)
     }
 
+    /**
+     * Remove All Tags
+     */
     fun removeAllTags() {
         mTags.clear()
         drawTags()
     }
 
-    fun setTagListener(tagListener: TagListener?) {
-        mTagListener = tagListener
-    }
-
+    /**
+     * 清除所有Tag&清除AutoCompleteTextView输入并回调给上层EmailTagView更新状态
+     */
     fun clear() {
         mailAutoCompleteTextView.setText("")
         removeAllTags()
