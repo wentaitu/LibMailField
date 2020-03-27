@@ -3,7 +3,6 @@
 #### 1.简介
 
 邮件发送页面输入框控件，用于邮件地址输入，邮件地址错误检查，获取输入地址等
-[GitLab地址](https://gitlab.gz.cvte.cn/i_tuwentai/libmailfield) :https://gitlab.gz.cvte.cn/i_tuwentai/libmailfield
 <center class="half">    
   <img src="./MailField1.gif" height="250"/><img src="./MailField2.gif" height="250"/>
 </center>
