@@ -2,9 +2,12 @@
 
 ***
 邮件发送页面输入框控件，用于邮件地址输入，邮件地址错误检查，控件类名 EmailTagView
+
 <center class="half">    
   <img src="./MailField1.gif" height="250"/><img src="./MailField2.gif" height="250"/>
 </center>
+
+
 #### 使用：`<include layout="@layout/layout_mail_address_field"/>`
 
 | EmailTagView | 外部使用方法                                          | 方法说明                                                |
@@ -79,7 +82,7 @@ object MailFieldConfig {
 
 #### 布局：
 
-![邮件输入框布局](./MailField3.png)
+![邮件输入框布局](./MailField3.jpeg)
 
 （1）最外层采用ScrollView为了使达到最大高度时变为滑动；
 
@@ -89,11 +92,11 @@ object MailFieldConfig {
 
 #### 邮件Tag对齐
 
-##### （1）边界padding 0.5dp避免内部Tag或者滑动条遮挡背景框；
+##### （1）边界padding 0.5dp避免内部Tag或者滑动条遮挡背景框
 
-##### （2）Linearlayout padding 2.17dp 外边框距离内部Tag多添加一倍宽度；
+##### （2）Linearlayout padding 2.17dp 外边框距离内部Tag多添加一倍宽度
 
-##### （3）For循环中根据所有地址列表，一次性添加所有地址View；
+##### （3）For循环中根据所有地址列表，一次性添加所有地址View
 
 ​         每个Tag设置setId(id)，用于后一个Tag与前一个对齐，同时记录每行第一个Tag ID，用以右、下Tag对齐；
 
@@ -103,7 +106,7 @@ object MailFieldConfig {
 
 ​         到达最后一个Tag，添加bottomMargin；
 
-​         注：total为本行已添加Tag宽度加上Tag之间margin、mWidth为EmailTagView宽度
+​         注：total为本行已添加Tag宽度加上Tag之间margin、mWidth为EmailTagView宽度;
 
 ##### （4）所有Tag绘制完在尾部添加AutoCompleteTextView
 
@@ -113,4 +116,8 @@ object MailFieldConfig {
 
 ​         有文字（重新编辑邮件），(mWidth - total - tagMargin * 2) <= (tagLineFeedDistance + textLength)则添加到新行且设置left、right Margin，否则往右添加设置right Margin；
 
-​         动态换行时监听输入长度，处于整行则不换行（即第一次输入或已被添加到整行），换行时添加left Margin
+​         动态换行时监听输入长度，处于整行则不换行（即第一次输入或已被添加到整行），换行时添加left Margin.
+
+#### 类图
+
+![类图](./MailField4.png)
