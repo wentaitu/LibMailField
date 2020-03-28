@@ -10,7 +10,7 @@ import android.view.View
 import android.widget.RelativeLayout
 import android.widget.TextView
 import com.cvte.maxhub.mailfield.bean.EmailTag
-import com.cvte.maxhub.mailfield.config.MailFieldConfig
+import com.cvte.maxhub.mailfield.config.MailFieldDefAttr
 import com.cvte.maxhub.mailfield.view.EmailAutoCompleteTextView
 import com.cvte.maxhub.mailfield.view.EmailAutoCompleteTextView.OnAutoCompleteClickListener
 import com.cvte.maxhub.mailfield.view.EmailAutoCompleteTextView.OnAutoCompleteTextLengthListener
@@ -69,9 +69,8 @@ open class TagView @JvmOverloads constructor(
     var editTvHeight = 0
     var editTvShowDropdownList = false
     /**
-     * mAutoCompleteTextView 添加至新行的最小值
-     * @see .addAutoCompleteTextViewToBelow
-     * @see EmailTagView .setRecipientLimit
+     * AutoCompleteTextView添加至新行剩余距离最小值
+     * @see addAutoCompleteTextViewToBelow
      */
     var editTvLineFeedDistance = 0
 
@@ -102,55 +101,55 @@ open class TagView @JvmOverloads constructor(
 
         val typeArray = context.obtainStyledAttributes(attrs, R.styleable.TagView, defStyleAttr, defStyleAttr)
         lineMargin = typeArray.getDimension(R.styleable.TagView_lineMargin,
-            dpToPx(this.context, MailFieldConfig.DEFAULT_LINE_MARGIN).toFloat()).toInt()
+            dpToPx(this.context, MailFieldDefAttr.DEFAULT_LINE_MARGIN).toFloat()).toInt()
         tagMargin = typeArray.getDimension(R.styleable.TagView_tagMargin,
-            dpToPx(this.context, MailFieldConfig.DEFAULT_TAG_MARGIN).toFloat()).toInt()
+            dpToPx(this.context, MailFieldDefAttr.DEFAULT_TAG_MARGIN).toFloat()).toInt()
         focusScrollViewBg = typeArray.getResourceId(R.styleable.TagView_focusScrollViewBg,
-            MailFieldConfig.TAG_ON_FOCUS_SCROLLVIEW_BG_RES_ID)
+            MailFieldDefAttr.TAG_ON_FOCUS_SCROLLVIEW_BG_RES_ID)
         loseFocusScrollViewBg = typeArray.getResourceId(R.styleable.TagView_loseFocusScrollViewBg,
-            MailFieldConfig.TAG_ON_OUT_FOCUS_SCROLLVIEW_BG_RES_ID)
+            MailFieldDefAttr.TAG_ON_OUT_FOCUS_SCROLLVIEW_BG_RES_ID)
 
         tagTextSize = typeArray.getDimension(R.styleable.TagView_tagTextSize,
-            spToPx(this.context, MailFieldConfig.DEFAULT_TAG_TEXT_SIZE).toFloat())
+            spToPx(this.context, MailFieldDefAttr.DEFAULT_TAG_TEXT_SIZE).toFloat())
         tagTextColor = typeArray.getColor(R.styleable.TagView_tagTextColor,
-            MailFieldConfig.DEFAULT_TAG_TEXT_COLOR)
+            MailFieldDefAttr.DEFAULT_TAG_TEXT_COLOR)
         tagAbnormalTextColor = typeArray.getColor(R.styleable.TagView_tagAbnormalTextColor,
-            MailFieldConfig.TAG_WRONG_ADDRESS_TEXT_COLOR)
+            MailFieldDefAttr.TAG_WRONG_ADDRESS_TEXT_COLOR)
         tagTextPaddingLeft = typeArray.getDimension(R.styleable.TagView_tagTextPaddingLeft,
-            dpToPx(this.context, MailFieldConfig.DEFAULT_TAG_TEXT_PADDING_LEFT).toFloat()).toInt()
+            dpToPx(this.context, MailFieldDefAttr.DEFAULT_TAG_TEXT_PADDING_LEFT).toFloat()).toInt()
         tagTextPaddingRight = typeArray.getDimension(R.styleable.TagView_tagTextPaddingRight,
-            dpToPx(this.context, MailFieldConfig.DEFAULT_TAG_TEXT_PADDING_RIGHT).toFloat()).toInt()
+            dpToPx(this.context, MailFieldDefAttr.DEFAULT_TAG_TEXT_PADDING_RIGHT).toFloat()).toInt()
         tagTextPaddingTop = typeArray.getDimension(R.styleable.TagView_tagTextPaddingTop,
-            dpToPx(this.context, MailFieldConfig.DEFAULT_TAG_TEXT_PADDING_TOP).toFloat()).toInt()
+            dpToPx(this.context, MailFieldDefAttr.DEFAULT_TAG_TEXT_PADDING_TOP).toFloat()).toInt()
         tagTexPaddingBottom = typeArray.getDimension(R.styleable.TagView_tagTextPaddingBottom,
-            dpToPx(this.context, MailFieldConfig.DEFAULT_TAG_TEXT_PADDING_BOTTOM).toFloat()).toInt()
+            dpToPx(this.context, MailFieldDefAttr.DEFAULT_TAG_TEXT_PADDING_BOTTOM).toFloat()).toInt()
         tagNormalLayoutBg = typeArray.getResourceId(R.styleable.TagView_tagNormalLayoutBg,
-            MailFieldConfig.DEFAULT_TAG_LAYOUT_BG_RES_ID)
+            MailFieldDefAttr.DEFAULT_TAG_LAYOUT_BG_RES_ID)
         tagAbnormalLayoutBg = typeArray.getResourceId(R.styleable.TagView_tagAbnormalLayoutBg,
-            MailFieldConfig.TAG_WRONG_LAYOUT_BG_RES_ID)
+            MailFieldDefAttr.TAG_WRONG_LAYOUT_BG_RES_ID)
         tagNormalDeleteBg = typeArray.getResourceId(R.styleable.TagView_tagNormalDeleteBg,
-            MailFieldConfig.DEFAULT_TAG_DELETE_BG_RES_ID)
+            MailFieldDefAttr.DEFAULT_TAG_DELETE_BG_RES_ID)
         tagAbnormalDeleteBg = typeArray.getResourceId(R.styleable.TagView_tagAbnormalDeleteBg,
-            MailFieldConfig.TAG_WRONG_DELETE_BG_RES_ID)
+            MailFieldDefAttr.TAG_WRONG_DELETE_BG_RES_ID)
         tagIsDeletable = typeArray.getBoolean(R.styleable.TagView_tagIsDeletable,
-            MailFieldConfig.DEFAULT_TAG_IS_DELETABLE)
+            MailFieldDefAttr.DEFAULT_TAG_IS_DELETABLE)
 
         editTvLineFeedDistance = typeArray.getDimension(R.styleable.TagView_editTvLineFeedDistance,
-            dpToPx(this.context, MailFieldConfig.TAG_LINE_FEED_DISTANCE).toFloat()).toInt()
+            dpToPx(this.context, MailFieldDefAttr.TAG_LINE_FEED_DISTANCE).toFloat()).toInt()
         editTvDropdownBg = typeArray.getResourceId(R.styleable.TagView_editTvDropdownBg,
-            MailFieldConfig.AutoCompleteTextView_DROPDOWN_BG_RES_ID)
+            MailFieldDefAttr.AutoCompleteTextView_DROPDOWN_BG_RES_ID)
         editTvDropdownItemTextColor = typeArray.getColor(R.styleable.TagView_editTvDropdownItemTextColor,
-            MailFieldConfig.AutoCompleteTextView_ITEM_TEXT_COLOR)
+            MailFieldDefAttr.AutoCompleteTextView_ITEM_TEXT_COLOR)
         editTvTextSize = typeArray.getDimension(R.styleable.TagView_editTvTextSize,
-            spToPx(this.context, MailFieldConfig.AutoCompleteTextView_TEXT_SIZE).toFloat())
+            spToPx(this.context, MailFieldDefAttr.AutoCompleteTextView_TEXT_SIZE).toFloat())
         editTvTextColor = typeArray.getColor(R.styleable.TagView_editTvTextColor,
-            MailFieldConfig.AutoCompleteTextView_TEXT_COLOR)
+            MailFieldDefAttr.AutoCompleteTextView_TEXT_COLOR)
         editTvSuffixColor = typeArray.getColor(R.styleable.TagView_editTvSuffixColor,
-            MailFieldConfig.AutoCompleteTextView_SUFFIX_TEXT_COLOR)
+            MailFieldDefAttr.AutoCompleteTextView_SUFFIX_TEXT_COLOR)
         editTvHeight = typeArray.getDimension(R.styleable.TagView_editTvHeight,
-            dpToPx(this.context, MailFieldConfig.AutoCompleteTextView_HEIGHT).toFloat()).toInt()
+            dpToPx(this.context, MailFieldDefAttr.AutoCompleteTextView_HEIGHT).toFloat()).toInt()
         editTvShowDropdownList = typeArray.getBoolean(R.styleable.TagView_editTvShowDropdownList,
-            MailFieldConfig.AutoCompleteTextView_SHOW_DROPDOWN_LIST)
+            MailFieldDefAttr.AutoCompleteTextView_SHOW_DROPDOWN_LIST)
         typeArray.recycle()
 
         isFocusable = true

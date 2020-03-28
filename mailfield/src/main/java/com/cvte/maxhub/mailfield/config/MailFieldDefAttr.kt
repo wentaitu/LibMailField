@@ -7,9 +7,9 @@ import com.cvte.maxhub.mailfield.R
  * @author tuwentai
  * @email i_tuwentai@cvte.com
  * @date 2020-03-25
- * @description: 邮件输入框默认样式
+ * @description: 邮件输入框默认样式，若需配置属性，使用xml配置即可
  */
-object MailFieldConfig {
+object MailFieldDefAttr {
 
     //use dp and sp, not px
     /*----------------- separator TagView -----------------*/

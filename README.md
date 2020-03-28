@@ -26,64 +26,34 @@
 | 8            | clear()                                               | 清空输入框所有内容                                      |
 | 9            | destroy()                                             | 释放资源                                                |
 
-##### 输入框可配置项：
-可通过MailFieldConfig配置控件属性
+##### 输入框属性配置：
+无配置则采用默认实现(如上图)，若需配置属性，则重写`<include layout="@layout/layout_mail_address_field"/>`布局，EmailTagView可配置如下属性：
 
-```kotlin
-object MailFieldConfig {
-
-    //use dp and sp, not px
-    /*----------------- separator TagView -----------------*/
-    var DEFAULT_LINE_MARGIN = 2.67f
-    var DEFAULT_TAG_MARGIN = 2.67f
-    var DEFAULT_TAG_TEXT_PADDING_LEFT = 4f
-    var DEFAULT_TAG_TEXT_PADDING_TOP = 4f
-    var DEFAULT_TAG_TEXT_PADDING_RIGHT = 4f
-    var DEFAULT_TAG_TEXT_PADDING_BOTTOM = 4f
-    var TAG_ON_FOCUS_SCROLLVIEW_BG_RES_ID = R.drawable.email_scrollview_focus_back
-    var TAG_ON_OUT_FOCUS_SCROLLVIEW_BG_RES_ID = R.drawable.email_scrollview_not_focus_back
-    // 地址过长默认自动换行距离，若有地址后缀则此长度为后缀长度
-    var TAG_LINE_FEED_DISTANCE = 20f
-
-
-    /*----------------- separator Tag Item -----------------*/
-    // 默认地址Tag属性配置
-    var DEFAULT_TAG_TEXT_SIZE = 10f
-    var DEFAULT_TAG_DELETE_INDICATOR_SIZE = 12f
-    var DEFAULT_TAG_LAYOUT_BORDER_SIZE = 0f
-    var DEFAULT_TAG_RADIUS = 3f
-    var DEFAULT_TAG_LAYOUT_BORDER_COLOR = Color.parseColor("#ffffff")
-    // 邮件Tag删除按钮是否显示
-    var DEFAULT_TAG_IS_DELETABLE = true
-    var DEFAULT_TAG_LAYOUT_COLOR = Color.parseColor("#EEEEEE")
-    var DEFAULT_TAG_LAYOUT_COLOR_PRESS = DEFAULT_TAG_LAYOUT_COLOR
-    var DEFAULT_TAG_TEXT_COLOR = Color.BLACK
-    var DEFAULT_TAG_DELETE_BG_RES_ID = R.drawable.email_delete_right_selector
-    var DEFAULT_TAG_DELETE_INDICATOR_COLOR = Color.parseColor("#000000")
-    // 错误地址Tag属性配置
-    var TAG_WRONG_ADDRESS_LAYOUT_COLOR = Color.parseColor("#FF5555")
-    var TAG_WRONG_ADDRESS_LAYOUT_COLOR_PRESS = TAG_WRONG_ADDRESS_LAYOUT_COLOR
-    var TAG_WRONG_ADDRESS_TEXT_COLOR = Color.WHITE
-    var TAG_WRONG_DELETE_BG_RES_ID = R.drawable.email_delete_error_selector
-    var TAG_WRONG_DELETE_INDICATOR_COLOR = Color.parseColor("#000000")
+| 属性名称                    | 意义 | 属性名称 |   意义   |
+| --------------------------- | ---- | -------- | ---- |
+| lineMargin                  | 行间距 | tagTextSize | Tag文字大小 |
+| tagMargin                   | Tag之间间距 | tagTextColor | Tag文字颜色 |
+| focusScrollViewBg           | 有焦点背景 | tagAbnormalTextColor | 异常Tag文字颜色 |
+| loseFocusScrollViewBg       | 无焦点背景 | tagTextPaddingLeft | Tag文字左间距 |
+| editTvDropdownBg | 输入下拉框背景 | tagTextPaddingRight | Tag文字右间距 |
+| editTvDropdownItemTextColor | 下拉框文字颜色 | tagTextPaddingTop | Tag文字上间距 |
+| editTvTextSize              | 输入文字大小 | tagTexPaddingBottom | Tag文字下间距 |
+| editTvTextColor             | 输入文字颜色 | tagNormalLayoutBg | Tag背景 |
+| editTvSuffixColor           | 后缀限制hint颜色 | tagAbnormalLayoutBg | 异常Tag背景 |
+| editTvHeight                | 输入EditText高度 | tagAbnormalDeleteBg | Tag删除按钮背景 |
+| editTvShowDropdownList      | 是否显示下拉列表 | tagAbnormalDeleteBg | Tag异常下删除按钮背景 |
+| editTvLineFeedDistance      | 默认EditText换行剩余距离 | tagIsDeletable | 是否显示Tag删除按钮 |
 
 
-    /* ------------------ separator for other---------------*/
-    // 字符输入AutoCompleteTextView属性配置
-    var AutoCompleteTextView_DROPDOWN_BG_RES_ID = R.drawable.bg_small_shadow
-    var AutoCompleteTextView_ITEM_TEXT_COLOR = Color.parseColor("#898989")
-    var AutoCompleteTextView_TEXT_SIZE = DEFAULT_TAG_TEXT_SIZE
-    var AutoCompleteTextView_TEXT_COLOR = Color.parseColor("#262626")
-    var AutoCompleteTextView_HEIGHT = 21.33f
-    // 是否需要显示邮件下拉列表，是：则显示MAIL_SUFFIXS中的后缀
-    val NEED_SHOW_AUTO_COMPLETE = false
-    var MAIL_SUFFIXS = arrayOf("@cvte.com", "@qq.com", "@163.com", "@gmail.com")
-    // MaxHeightScrollView默认最高高度
-    var SCROLLVIEW_MAX_HEIGHT = 104f
-    var TAG_ADDRESS_SUFFIX_LIMITATION_TEXT_COLOR = Color.parseColor("#BBBBBB")
 
-}
-```
+​    var tagIsDeletable = true
+​    var editTvDropdownBg = 0
+​    var editTvDropdownItemTextColor = 0
+​    var editTvTextSize = 0f
+​    var editTvTextColor = 0
+​    var editTvSuffixColor = 0
+​    var editTvHeight = 0
+​    var editTvShowDropdownList = false
 
 #### 3.实现原理
 
