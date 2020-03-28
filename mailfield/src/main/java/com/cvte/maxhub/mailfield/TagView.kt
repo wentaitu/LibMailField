@@ -2,9 +2,6 @@ package com.cvte.maxhub.mailfield
 
 import android.content.Context
 import android.graphics.Typeface
-import android.graphics.drawable.Drawable
-import android.graphics.drawable.GradientDrawable
-import android.graphics.drawable.StateListDrawable
 import android.text.TextUtils
 import android.util.AttributeSet
 import android.util.TypedValue
@@ -12,13 +9,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.RelativeLayout
 import android.widget.TextView
-import com.cvte.maxhub.mailfield.view.EmailAutoCompleteTextView.OnAutoCompleteClickListener
-import com.cvte.maxhub.mailfield.view.EmailAutoCompleteTextView.OnAutoCompleteTextLengthListener
-import com.cvte.maxhub.mailfield.view.TouchTextView.OnClickViewListener
 import com.cvte.maxhub.mailfield.bean.EmailTag
 import com.cvte.maxhub.mailfield.config.MailFieldConfig
 import com.cvte.maxhub.mailfield.view.EmailAutoCompleteTextView
+import com.cvte.maxhub.mailfield.view.EmailAutoCompleteTextView.OnAutoCompleteClickListener
+import com.cvte.maxhub.mailfield.view.EmailAutoCompleteTextView.OnAutoCompleteTextLengthListener
 import com.cvte.maxhub.mailfield.view.TouchTextView
+import com.cvte.maxhub.mailfield.view.TouchTextView.OnClickViewListener
+import kotlin.math.min
 
 /**
  * @author tuwentai
@@ -49,20 +47,36 @@ open class TagView @JvmOverloads constructor(
     // custom layout param
     var lineMargin = 0
     var tagMargin = 0
-    var textPaddingLeft = 0
-    var textPaddingRight = 0
-    var textPaddingTop = 0
-    var texPaddingBottom = 0
-
+    var focusScrollViewBg = 0
+    var loseFocusScrollViewBg = 0
+    var tagTextSize = 0f         // 11
+    var tagTextColor = 0
+    var tagAbnormalTextColor = 0
+    var tagTextPaddingLeft = 0
+    var tagTextPaddingRight = 0
+    var tagTextPaddingTop = 0
+    var tagTexPaddingBottom = 0
+    var tagNormalLayoutBg = 0
+    var tagAbnormalLayoutBg = 0
+    var tagNormalDeleteBg = 0
+    var tagAbnormalDeleteBg = 0
+    var tagIsDeletable = true
+    var editTvDropdownBg = 0
+    var editTvDropdownItemTextColor = 0
+    var editTvTextSize = 0f
+    var editTvTextColor = 0
+    var editTvSuffixColor = 0
+    var editTvHeight = 0
+    var editTvShowDropdownList = false
     /**
      * mAutoCompleteTextView 添加至新行的最小值
      * @see .addAutoCompleteTextViewToBelow
      * @see EmailTagView .setRecipientLimit
      */
-    private var tagLineFeedDistance = dpToPx(context, MailFieldConfig.TAG_LINE_FEED_DISTANCE)
+    var editTvLineFeedDistance = 0
 
-    fun setTagLineFeedDistance(size: Int) {
-        tagLineFeedDistance = size
+    fun setTagLineFeedDistance(size: Float) {
+        editTvLineFeedDistance = dpToPx(context,size)
     }
 
     protected lateinit var mailAutoCompleteTextView: EmailAutoCompleteTextView
@@ -87,24 +101,56 @@ open class TagView @JvmOverloads constructor(
         }
 
         val typeArray = context.obtainStyledAttributes(attrs, R.styleable.TagView, defStyleAttr, defStyleAttr)
-        lineMargin = typeArray.getDimension(
-            R.styleable.TagView_lineMargin,
+        lineMargin = typeArray.getDimension(R.styleable.TagView_lineMargin,
             dpToPx(this.context, MailFieldConfig.DEFAULT_LINE_MARGIN).toFloat()).toInt()
-        tagMargin = typeArray.getDimension(
-            R.styleable.TagView_tagMargin,
+        tagMargin = typeArray.getDimension(R.styleable.TagView_tagMargin,
             dpToPx(this.context, MailFieldConfig.DEFAULT_TAG_MARGIN).toFloat()).toInt()
-        textPaddingLeft = typeArray.getDimension(
-            R.styleable.TagView_textPaddingLeft,
+        focusScrollViewBg = typeArray.getResourceId(R.styleable.TagView_focusScrollViewBg,
+            MailFieldConfig.TAG_ON_FOCUS_SCROLLVIEW_BG_RES_ID)
+        loseFocusScrollViewBg = typeArray.getResourceId(R.styleable.TagView_loseFocusScrollViewBg,
+            MailFieldConfig.TAG_ON_OUT_FOCUS_SCROLLVIEW_BG_RES_ID)
+
+        tagTextSize = typeArray.getDimension(R.styleable.TagView_tagTextSize,
+            spToPx(this.context, MailFieldConfig.DEFAULT_TAG_TEXT_SIZE).toFloat())
+        tagTextColor = typeArray.getColor(R.styleable.TagView_tagTextColor,
+            MailFieldConfig.DEFAULT_TAG_TEXT_COLOR)
+        tagAbnormalTextColor = typeArray.getColor(R.styleable.TagView_tagAbnormalTextColor,
+            MailFieldConfig.TAG_WRONG_ADDRESS_TEXT_COLOR)
+        tagTextPaddingLeft = typeArray.getDimension(R.styleable.TagView_tagTextPaddingLeft,
             dpToPx(this.context, MailFieldConfig.DEFAULT_TAG_TEXT_PADDING_LEFT).toFloat()).toInt()
-        textPaddingRight = typeArray.getDimension(
-            R.styleable.TagView_textPaddingRight,
+        tagTextPaddingRight = typeArray.getDimension(R.styleable.TagView_tagTextPaddingRight,
             dpToPx(this.context, MailFieldConfig.DEFAULT_TAG_TEXT_PADDING_RIGHT).toFloat()).toInt()
-        textPaddingTop = typeArray.getDimension(
-            R.styleable.TagView_textPaddingTop,
+        tagTextPaddingTop = typeArray.getDimension(R.styleable.TagView_tagTextPaddingTop,
             dpToPx(this.context, MailFieldConfig.DEFAULT_TAG_TEXT_PADDING_TOP).toFloat()).toInt()
-        texPaddingBottom = typeArray.getDimension(
-            R.styleable.TagView_textPaddingBottom,
+        tagTexPaddingBottom = typeArray.getDimension(R.styleable.TagView_tagTextPaddingBottom,
             dpToPx(this.context, MailFieldConfig.DEFAULT_TAG_TEXT_PADDING_BOTTOM).toFloat()).toInt()
+        tagNormalLayoutBg = typeArray.getResourceId(R.styleable.TagView_tagNormalLayoutBg,
+            MailFieldConfig.DEFAULT_TAG_LAYOUT_BG_RES_ID)
+        tagAbnormalLayoutBg = typeArray.getResourceId(R.styleable.TagView_tagAbnormalLayoutBg,
+            MailFieldConfig.TAG_WRONG_LAYOUT_BG_RES_ID)
+        tagNormalDeleteBg = typeArray.getResourceId(R.styleable.TagView_tagNormalDeleteBg,
+            MailFieldConfig.DEFAULT_TAG_DELETE_BG_RES_ID)
+        tagAbnormalDeleteBg = typeArray.getResourceId(R.styleable.TagView_tagAbnormalDeleteBg,
+            MailFieldConfig.TAG_WRONG_DELETE_BG_RES_ID)
+        tagIsDeletable = typeArray.getBoolean(R.styleable.TagView_tagIsDeletable,
+            MailFieldConfig.DEFAULT_TAG_IS_DELETABLE)
+
+        editTvLineFeedDistance = typeArray.getDimension(R.styleable.TagView_editTvLineFeedDistance,
+            dpToPx(this.context, MailFieldConfig.TAG_LINE_FEED_DISTANCE).toFloat()).toInt()
+        editTvDropdownBg = typeArray.getResourceId(R.styleable.TagView_editTvDropdownBg,
+            MailFieldConfig.AutoCompleteTextView_DROPDOWN_BG_RES_ID)
+        editTvDropdownItemTextColor = typeArray.getColor(R.styleable.TagView_editTvDropdownItemTextColor,
+            MailFieldConfig.AutoCompleteTextView_ITEM_TEXT_COLOR)
+        editTvTextSize = typeArray.getDimension(R.styleable.TagView_editTvTextSize,
+            spToPx(this.context, MailFieldConfig.AutoCompleteTextView_TEXT_SIZE).toFloat())
+        editTvTextColor = typeArray.getColor(R.styleable.TagView_editTvTextColor,
+            MailFieldConfig.AutoCompleteTextView_TEXT_COLOR)
+        editTvSuffixColor = typeArray.getColor(R.styleable.TagView_editTvSuffixColor,
+            MailFieldConfig.AutoCompleteTextView_SUFFIX_TEXT_COLOR)
+        editTvHeight = typeArray.getDimension(R.styleable.TagView_editTvHeight,
+            dpToPx(this.context, MailFieldConfig.AutoCompleteTextView_HEIGHT).toFloat()).toInt()
+        editTvShowDropdownList = typeArray.getBoolean(R.styleable.TagView_editTvShowDropdownList,
+            MailFieldConfig.AutoCompleteTextView_SHOW_DROPDOWN_LIST)
         typeArray.recycle()
 
         isFocusable = true
@@ -113,12 +159,14 @@ open class TagView @JvmOverloads constructor(
     }
 
     private fun initAutoCompleteTextView() {
-        mailAutoCompleteTextView =
-            mInflater.inflate(R.layout.email_auto_layout, null) as EmailAutoCompleteTextView
+        mailAutoCompleteTextView = mInflater.inflate(R.layout.email_auto_layout, null) as EmailAutoCompleteTextView
         mailAutoCompleteTextView.isFocusable = true
         mailAutoCompleteTextView.isFocusableInTouchMode = true
-        mailAutoCompleteTextView.setTextColor(MailFieldConfig.AutoCompleteTextView_TEXT_COLOR)
-        mailAutoCompleteTextView.textSize = MailFieldConfig.AutoCompleteTextView_TEXT_SIZE
+        mailAutoCompleteTextView.setTextColor(editTvTextColor)
+        mailAutoCompleteTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX, editTvTextSize)
+        mailAutoCompleteTextView.threshold = if (editTvShowDropdownList && mRecipientLimit != null) 1 else Int.MAX_VALUE
+        mailAutoCompleteTextView.dropdownItemTextColor = editTvDropdownItemTextColor
+        mailAutoCompleteTextView.setDropDownBackgroundResource(editTvDropdownBg)
         // mAutoCompleteTextView.setFilters(new InputFilter[] { new InputFilter.LengthFilter(32) });
         mailAutoCompleteTextView.setAutoCompleteItemClickListener(object :
             OnAutoCompleteClickListener {
@@ -178,15 +226,21 @@ open class TagView @JvmOverloads constructor(
             // inflate TAG layout
             val tagLayout = mInflater.inflate(R.layout.email_tagview_item, null)
             tagLayout.id = listIndex
-            tagLayout.background = getSelector(item)
+            if (item.isEmailOk) {
+                tagLayout.setBackgroundResource(tagNormalLayoutBg)
+            } else {
+                tagLayout.setBackgroundResource(tagAbnormalLayoutBg)
+            }
             var deleteWidth = 0f
             // deletable text
             val deletableView = tagLayout.findViewById<TextView>(R.id.tv_tag_item_delete)
-            if (item.isDeletable) {
+            if (tagIsDeletable) {
                 deletableView.visibility = View.VISIBLE
-                deletableView.setBackgroundResource(item.deleteBgResId)
-                deletableView.setTextColor(item.deleteIndicatorColor)
-                deletableView.setTextSize(TypedValue.COMPLEX_UNIT_SP, item.deleteIndicatorSize)
+                if (item.isEmailOk) {
+                    deletableView.setBackgroundResource(tagNormalDeleteBg)
+                } else {
+                    deletableView.setBackgroundResource(tagAbnormalDeleteBg)
+                }
                 deletableView.typeface = Typeface.defaultFromStyle(Typeface.BOLD)
                 deletableView.setOnClickListener {
                     mRequestFocusFlag = false
@@ -202,12 +256,16 @@ open class TagView @JvmOverloads constructor(
                 deletableView.visibility = View.GONE
             }
             // TAG text
-            val tagView: TouchTextView = tagLayout.findViewById(R.id.tv_tag_item_contain)
-            tagView.text = item.text
-            tagView.setPadding(textPaddingLeft, textPaddingTop, textPaddingRight, texPaddingBottom)
-            tagView.setTextColor(item.tagTextColor)
-            tagView.textSize = item.tagTextSize
-            tagView.setOnClickViewListener(object : OnClickViewListener {
+            val addressTv: TouchTextView = tagLayout.findViewById(R.id.tv_tag_item_contain)
+            addressTv.text = item.text
+            addressTv.setPadding(tagTextPaddingLeft, tagTextPaddingTop, tagTextPaddingRight, tagTexPaddingBottom)
+            if (item.isEmailOk) {
+                addressTv.setTextColor(tagTextColor)
+            } else {
+                addressTv.setTextColor(tagAbnormalTextColor)
+            }
+            addressTv.setTextSize(TypedValue.COMPLEX_UNIT_PX, tagTextSize)
+            addressTv.setOnClickViewListener(object : OnClickViewListener {
                 override fun onClick(view: View?) {
                     if (mTagListener != null && TextUtils.isEmpty(mailAutoCompleteTextView.text)) {
                         mTagListener!!.onTagClick(item, position)
@@ -216,11 +274,11 @@ open class TagView @JvmOverloads constructor(
             })
             val maxTagViewWidth =
                 (mWidth - deleteWidth - paddingLeft - paddingRight - tagMargin * 2).toInt()
-            tagView.maxWidth = maxTagViewWidth
+            addressTv.maxWidth = maxTagViewWidth
             // calculate　of TAG layout width  padding (left & right)，不能直接使用float tagWidth = tagLayout.getWidth()
-            val tagWidth = Math.min(
+            val tagWidth = min(
                 mWidth - tagMargin * 2.toFloat(),
-                tagView.paint.measureText(item.text) + textPaddingLeft + textPaddingRight + deleteWidth
+                addressTv.paint.measureText(item.text) + tagTextPaddingLeft + tagTextPaddingRight + deleteWidth
             )
             val tagParams = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
 
@@ -272,13 +330,13 @@ open class TagView @JvmOverloads constructor(
                     addAutoCompleteTextViewToRight(indexHeader, listIndex - 1)
                 }
             } else {
-                if (mWidth - total - tagMargin * 2 <= tagLineFeedDistance + textLength) {
+                if (mWidth - total - tagMargin * 2 <= editTvLineFeedDistance + textLength) {
                     addAutoCompleteTextViewToBelow(indexHeader)
                 } else {
                     addAutoCompleteTextViewToRight(indexHeader, listIndex - 1)
                 }
             }
-        } else if (mWidth - total - tagMargin * 2 <= tagLineFeedDistance) {
+        } else if (mWidth - total - tagMargin * 2 <= editTvLineFeedDistance) {
             // 不能直接使用mAutoCompleteTextView.getMeasuredWidth() <= tagLineFeedDistance判断换行
             // 此时新的AutoCompleteTextView还未变更，仍处于旧的宽度
             isFirstInput = false
@@ -295,7 +353,7 @@ open class TagView @JvmOverloads constructor(
      * @param leftId Int 本行结尾Tag id
      */
     private fun addAutoCompleteTextViewToRight(topId: Int, leftId: Int) {
-        mAutoCompleteParams = LayoutParams(LayoutParams.MATCH_PARENT, dpToPx(context, MailFieldConfig.AutoCompleteTextView_HEIGHT))
+        mAutoCompleteParams = LayoutParams(LayoutParams.MATCH_PARENT, editTvHeight)
         mAutoCompleteParams!!.rightMargin = tagMargin
         // mAutoCompleteParams.bottomMargin = lineMargin;
         mAutoCompleteParams!!.addRule(ALIGN_TOP, topId)
@@ -312,7 +370,7 @@ open class TagView @JvmOverloads constructor(
      * @param bottomId Int 本行头部Tag id
      */
     private fun addAutoCompleteTextViewToBelow(bottomId: Int) {
-        mAutoCompleteParams = LayoutParams(LayoutParams.MATCH_PARENT, dpToPx(context, MailFieldConfig.AutoCompleteTextView_HEIGHT))
+        mAutoCompleteParams = LayoutParams(LayoutParams.MATCH_PARENT, editTvHeight)
         mAutoCompleteParams!!.leftMargin = tagMargin
         mAutoCompleteParams!!.rightMargin = tagMargin
         // mAutoCompleteParams.bottomMargin = lineMargin;
@@ -327,7 +385,7 @@ open class TagView @JvmOverloads constructor(
      * TagView初始化时首次添加AutoCompleteTextView
      */
     private fun initAddAutoCompleteTextView() {
-        mAutoCompleteParams = LayoutParams(LayoutParams.MATCH_PARENT, dpToPx(context, MailFieldConfig.AutoCompleteTextView_HEIGHT))
+        mAutoCompleteParams = LayoutParams(LayoutParams.MATCH_PARENT, editTvHeight)
         mAutoCompleteParams!!.leftMargin = tagMargin
         mAutoCompleteParams!!.rightMargin = tagMargin
         addView(mailAutoCompleteTextView, mAutoCompleteParams)
@@ -349,29 +407,6 @@ open class TagView @JvmOverloads constructor(
         mAutoCompleteParams!!.removeRule(ALIGN_BOTTOM)
         mAutoCompleteParams!!.removeRule(RIGHT_OF)
         requestLayout()
-    }
-
-    /**
-     * 生成当前地址Tag background
-     * @param tag EmailTag
-     * @return Drawable?
-     */
-    private fun getSelector(tag: EmailTag): Drawable? {
-        if (tag.background != null) return tag.background
-        val states = StateListDrawable()
-        val gdNormal = GradientDrawable()
-        gdNormal.setColor(tag.layoutColor)
-        gdNormal.cornerRadius = tag.radius
-        if (tag.layoutBorderSize > 0) {
-            gdNormal.setStroke(dpToPx(context, tag.layoutBorderSize), tag.layoutBorderColor)
-        }
-        val gdPress = GradientDrawable()
-        gdPress.setColor(tag.layoutColorPress)
-        gdPress.cornerRadius = tag.radius
-        states.addState(intArrayOf(android.R.attr.state_pressed), gdPress)
-        //must add state_pressed first，or state_pressed will not take effect
-        states.addState(intArrayOf(), gdNormal)
-        return states
     }
 
     fun refresh() {
@@ -443,6 +478,11 @@ open class TagView @JvmOverloads constructor(
     private fun dpToPx(context: Context, dp: Float): Int {
         val metrics = context.resources.displayMetrics
         return TypedValue.applyDimension(1, dp, metrics).toInt()
+    }
+
+    private fun spToPx(context: Context, spValue: Float): Int {
+        val metrics = context.resources.displayMetrics
+        return TypedValue.applyDimension(2, spValue, metrics).toInt()
     }
 
 }

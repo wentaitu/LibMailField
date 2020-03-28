@@ -1,11 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="TagView">
+        <!--整体布局属性-->
         <attr name="lineMargin" format="dimension" />
         <attr name="tagMargin" format="dimension" />
-        <attr name="textPaddingLeft" format="dimension" />
-        <attr name="textPaddingRight" format="dimension" />
-        <attr name="textPaddingTop" format="dimension" />
-        <attr name="textPaddingBottom" format="dimension" />
+        <attr name="focusScrollViewBg" format="reference"/>
+        <attr name="loseFocusScrollViewBg" format="reference"/>
+        <!--地址Tag属性-->
+        <attr name="tagTextPaddingLeft" format="dimension" />
+        <attr name="tagTextPaddingRight" format="dimension" />
+        <attr name="tagTextPaddingTop" format="dimension" />
+        <attr name="tagTextPaddingBottom" format="dimension" />
+        <attr name="tagTextSize" format="dimension"/>
+        <attr name="tagTextColor" format="color"/>
+        <attr name="tagAbnormalTextColor" format="color"/>
+        <attr name="tagNormalLayoutBg" format="reference"/>
+        <attr name="tagAbnormalLayoutBg" format="reference"/>
+        <attr name="tagNormalDeleteBg" format="reference"/>
+        <attr name="tagAbnormalDeleteBg" format="reference"/>
+        <attr name="tagIsDeletable" format="boolean"/>
+        <!--AutoCompleteTextView属性-->
+        <attr name="editTvLineFeedDistance" format="reference"/>
+        <attr name="editTvDropdownBg" format="reference"/>
+        <attr name="editTvDropdownItemTextColor" format="color"/>
+        <attr name="editTvTextSize" format="dimension"/>
+        <attr name="editTvTextColor" format="color"/>
+        <attr name="editTvSuffixColor" format="color"/>
+        <attr name="editTvHeight" format="dimension"/>
+        <attr name="editTvShowDropdownList" format="boolean"/>
+    </declare-styleable>
+
+    <declare-styleable name="MaxHeightScrollView">
+        <attr name="maxHeight" format="dimension"/>
     </declare-styleable>
 </resources>

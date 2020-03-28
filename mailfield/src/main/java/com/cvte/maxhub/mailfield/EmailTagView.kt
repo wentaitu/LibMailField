@@ -9,7 +9,6 @@ import android.view.MotionEvent
 import android.view.View
 import android.widget.ScrollView
 import com.cvte.maxhub.mailfield.bean.EmailTag
-import com.cvte.maxhub.mailfield.config.MailFieldConfig
 import com.cvte.maxhub.mailfield.view.EmailAutoCompleteTextView
 import com.cvte.maxhub.mailfield.view.MaxHeightScrollView
 import kotlinx.android.synthetic.main.layout_mail_address_field.view.*
@@ -50,9 +49,9 @@ class EmailTagView @JvmOverloads
      */
     fun setRecipientLimit(limit: String) {
         mRecipientLimit = limit
-        mAutoTv.setRecipientLimit(limit, MailFieldConfig.TAG_ADDRESS_SUFFIX_LIMITATION_TEXT_COLOR)
-            if (!TextUtils.isEmpty(limit)) {
-            setTagLineFeedDistance((mAutoTv.paint.measureText(limit) + 0.5).toInt())
+        mAutoTv.setRecipientLimit(limit, editTvSuffixColor)
+        if (!TextUtils.isEmpty(limit)) {
+            setTagLineFeedDistance(mAutoTv.paint.measureText(limit) + 0.5f)
         }
     }
 
@@ -137,8 +136,8 @@ class EmailTagView @JvmOverloads
     override fun onTagClick(tag: EmailTag, position: Int) {
         // 此变量预留，若回调时mAutoTv有输入，可记录已输入值直接生成新Tag，被点击Tag处于可编辑状态
         var str = mAutoTv.text.toString()
-        if (!TextUtils.isEmpty(str) && str.indexOf('@') == -1 && MailFieldConfig.MAIL_SUFFIXS.isNotEmpty()) {
-            str += MailFieldConfig.MAIL_SUFFIXS[0]
+        if (!TextUtils.isEmpty(str) && str.indexOf('@') == -1 && !TextUtils.isEmpty(mRecipientLimit)) {
+            str += mRecipientLimit
         }
 
         // 若有邮件后缀，则恢复可编辑状态时去掉后缀
@@ -197,17 +196,7 @@ class EmailTagView @JvmOverloads
                 isRecipientOk = mailAddress.contains(recipientLimit)
             }
         }
-
-        if (!isRecipientOk) {
-            emailTag.layoutColor = MailFieldConfig.TAG_WRONG_ADDRESS_LAYOUT_COLOR
-            emailTag.layoutColorPress = MailFieldConfig.TAG_WRONG_ADDRESS_LAYOUT_COLOR_PRESS
-            emailTag.tagTextColor = MailFieldConfig.TAG_WRONG_ADDRESS_TEXT_COLOR
-            emailTag.deleteBgResId = MailFieldConfig.TAG_WRONG_DELETE_BG_RES_ID
-            emailTag.deleteIndicatorColor = MailFieldConfig.TAG_WRONG_DELETE_INDICATOR_COLOR
-            emailTag.isEmailOk = false
-        } else {
-            // default
-        }
+        emailTag.isEmailOk = isRecipientOk
         addTag(emailTag)
         this.post {
             (this.parent.parent as ScrollView).fullScroll(ScrollView.FOCUS_DOWN)
@@ -223,12 +212,12 @@ class EmailTagView @JvmOverloads
         if (view === mAutoTv) {
             var scrollView = tagViewEmail.parent.parent as MaxHeightScrollView
             if (hasFocus) {
-                mAutoTv.setRecipientLimit(mRecipientLimit, MailFieldConfig.TAG_ADDRESS_SUFFIX_LIMITATION_TEXT_COLOR)
-                scrollView.setBackgroundResource(MailFieldConfig.TAG_ON_FOCUS_SCROLLVIEW_BG_RES_ID)
+                mAutoTv.setRecipientLimit(mRecipientLimit, editTvSuffixColor)
+                scrollView.setBackgroundResource(focusScrollViewBg)
             } else {
-                scrollView.setBackgroundResource(MailFieldConfig.TAG_ON_OUT_FOCUS_SCROLLVIEW_BG_RES_ID)
+                scrollView.setBackgroundResource(loseFocusScrollViewBg)
                 if (tags.isNotEmpty()) {
-                    mAutoTv.setRecipientLimit(null, MailFieldConfig.TAG_ADDRESS_SUFFIX_LIMITATION_TEXT_COLOR)
+                    mAutoTv.setRecipientLimit(null, editTvSuffixColor)
                 }
             }
         }

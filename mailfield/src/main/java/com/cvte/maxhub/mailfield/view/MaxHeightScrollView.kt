@@ -5,6 +5,7 @@ import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.MotionEvent
 import android.widget.ScrollView
+import com.cvte.maxhub.mailfield.R
 import com.cvte.maxhub.mailfield.config.MailFieldConfig
 
 /**
@@ -17,7 +18,15 @@ class MaxHeightScrollView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : ScrollView(context, attrs, defStyleAttr) {
 
-    private var mMaxHeight = dpToPx(context, MailFieldConfig.SCROLLVIEW_MAX_HEIGHT)
+    private var mMaxHeight = 0
+
+    init {
+        val typeArray = context.obtainStyledAttributes(attrs, R.styleable.MaxHeightScrollView, defStyleAttr, defStyleAttr)
+        mMaxHeight = typeArray.getDimension(
+            R.styleable.MaxHeightScrollView_maxHeight,
+            dpToPx(this.context, MailFieldConfig.SCROLLVIEW_MAX_HEIGHT).toFloat()).toInt()
+        typeArray.recycle()
+    }
 
     fun setMaxHeight(maxHeightDp: Int) {
         mMaxHeight = dpToPx(context, maxHeightDp.toFloat())

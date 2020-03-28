@@ -2,6 +2,7 @@ package com.cvte.maxhub.mailfield.view
 
 import android.content.Context
 import android.graphics.Canvas
+import android.graphics.Color
 import android.graphics.Paint
 import android.text.Editable
 import android.text.TextUtils
@@ -17,7 +18,6 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatAutoCompleteTextView
 import com.cvte.maxhub.mailfield.R
-import com.cvte.maxhub.mailfield.config.MailFieldConfig
 import kotlin.math.abs
 
 /**
@@ -32,10 +32,12 @@ class EmailAutoCompleteTextView @JvmOverloads constructor(
 
     private var mListener: OnAutoCompleteClickListener? = null
     private var mLengthListener: OnAutoCompleteTextLengthListener? = null
-    private var mEmailAutoAdapt: EmailAutoCompleteAdapter? = null
+    private var mEmailAutoAdapter: EmailAutoCompleteAdapter? = null
     var recipientLimit: String? = null
     private var mRecipientLimitColor = 0
     private var mFilterRegex  = Regex("^[a-zA-Z0-9_]+$")
+    val MAIL_SUFFIXS = arrayOf("@cvte.com", "@qq.com", "@163.com", "@gmail.com")
+    var dropdownItemTextColor = Color.BLACK
 
     /**
      * onItemClick()用于准备添加新Tag时给上层View回调,
@@ -71,16 +73,9 @@ class EmailAutoCompleteTextView @JvmOverloads constructor(
     }
 
     init {
-        setDropDownBackgroundResource(MailFieldConfig.AutoCompleteTextView_DROPDOWN_BG_RES_ID)
-        mEmailAutoAdapt = EmailAutoCompleteAdapter(
-            context, R.layout.email_auto_list_item, MailFieldConfig.MAIL_SUFFIXS)
-        setAdapter(mEmailAutoAdapt)
-
-        if (MailFieldConfig.NEED_SHOW_AUTO_COMPLETE) {
-            this.threshold = 1
-        } else {
-            this.threshold = Int.MAX_VALUE
-        }
+        // dropdownItemTextColor =
+        mEmailAutoAdapter = EmailAutoCompleteAdapter(context, R.layout.email_auto_list_item, MAIL_SUFFIXS)
+        setAdapter(mEmailAutoAdapter)
 
         setOnKeyListener { _, keyCode, event ->
             enterKeyPressGenerateTag(keyCode, event)
@@ -251,7 +246,7 @@ class EmailAutoCompleteTextView @JvmOverloads constructor(
     }
 
     /**
-     * NEED_SHOW_AUTO_COMPLETE为true时下拉列表Adapter
+     * AutoCompleteTextView下拉列表Adapter
      * @constructor
      */
     private inner class EmailAutoCompleteAdapter(
@@ -265,7 +260,7 @@ class EmailAutoCompleteTextView @JvmOverloads constructor(
                 holder = ViewHolder()
                 convertView = LayoutInflater.from(context).inflate(R.layout.email_auto_list_item, null)
                 holder.emailTextView = convertView.findViewById(R.id.tv)
-                holder.emailTextView!!.setTextColor(MailFieldConfig.AutoCompleteTextView_ITEM_TEXT_COLOR)
+                holder.emailTextView!!.setTextColor(dropdownItemTextColor)
                 convertView.tag = holder
             } else {
                 holder = convertView.tag as ViewHolder

@@ -11,6 +11,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         var emailTagView = findViewById<EmailTagView>(R.id.tagViewEmail)
         emailTagView.setRecipientLimit("@cvte.com")
+
     }
 
 }
