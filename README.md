@@ -7,10 +7,9 @@
   <img src="./MailField1.gif" height="250"/><img src="./MailField2.gif" height="250"/>
 </center>
 
-
 #### 2.使用方式
 
-##### 控件主类名 EmailTagView，使用方法如下：
+##### 控件主类名 EmailTagView，可直接在布局中导入：
 
 `<include layout="@layout/layout_mail_address_field"/>`
 
@@ -27,7 +26,8 @@
 | 9            | destroy()                                             | 释放资源                                                |
 
 ##### 输入框属性配置：
-无配置则采用默认实现(如上图)，若需配置属性，则重写`<include layout="@layout/layout_mail_address_field"/>`布局，EmailTagView可配置如下属性：
+
+无配置则采用默认实现(如上图)，若需配置控件属性，则重写`<include layout="@layout/layout_mail_address_field"/>`布局，EmailTagView可配置xml属性如下所示：
 
 | 属性名称                    | 意义 | 属性名称 |   意义   |
 | --------------------------- | ---- | -------- | ---- |
@@ -43,17 +43,6 @@
 | editTvHeight                | 输入EditText高度 | tagAbnormalDeleteBg | Tag删除按钮背景 |
 | editTvShowDropdownList      | 是否显示下拉列表 | tagAbnormalDeleteBg | Tag异常下删除按钮背景 |
 | editTvLineFeedDistance      | 默认EditText换行剩余距离 | tagIsDeletable | 是否显示Tag删除按钮 |
-
-
-
-​    var tagIsDeletable = true
-​    var editTvDropdownBg = 0
-​    var editTvDropdownItemTextColor = 0
-​    var editTvTextSize = 0f
-​    var editTvTextColor = 0
-​    var editTvSuffixColor = 0
-​    var editTvHeight = 0
-​    var editTvShowDropdownList = false
 
 #### 3.实现原理
 
