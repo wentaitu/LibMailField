@@ -73,8 +73,7 @@ class EmailAutoCompleteTextView @JvmOverloads constructor(
     }
 
     init {
-        // dropdownItemTextColor =
-        mEmailAutoAdapter = EmailAutoCompleteAdapter(context, R.layout.email_auto_list_item, MAIL_SUFFIXS)
+        mEmailAutoAdapter = EmailAutoCompleteAdapter(context, R.layout.mail_auto_list_item, MAIL_SUFFIXS)
         setAdapter(mEmailAutoAdapter)
 
         setOnKeyListener { _, keyCode, event ->
@@ -258,7 +257,7 @@ class EmailAutoCompleteTextView @JvmOverloads constructor(
             val holder: ViewHolder
             if (convertView == null) {
                 holder = ViewHolder()
-                convertView = LayoutInflater.from(context).inflate(R.layout.email_auto_list_item, null)
+                convertView = LayoutInflater.from(context).inflate(R.layout.mail_auto_list_item, null)
                 holder.emailTextView = convertView.findViewById(R.id.tv)
                 holder.emailTextView!!.setTextColor(dropdownItemTextColor)
                 convertView.tag = holder

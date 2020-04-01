@@ -1,5 +1,6 @@
 package com.cvte.maxhub.mailfield
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Typeface
 import android.text.TextUtils
@@ -158,7 +159,7 @@ open class TagView @JvmOverloads constructor(
     }
 
     private fun initAutoCompleteTextView() {
-        mailAutoCompleteTextView = mInflater.inflate(R.layout.email_auto_layout, null) as EmailAutoCompleteTextView
+        mailAutoCompleteTextView = mInflater.inflate(R.layout.mail_auto_layout, null) as EmailAutoCompleteTextView
         mailAutoCompleteTextView.isFocusable = true
         mailAutoCompleteTextView.isFocusableInTouchMode = true
         mailAutoCompleteTextView.setTextColor(editTvTextColor)
@@ -223,7 +224,7 @@ open class TagView @JvmOverloads constructor(
         for (item in mTags) {
             val position = listIndex - 1
             // inflate TAG layout
-            val tagLayout = mInflater.inflate(R.layout.email_tagview_item, null)
+            val tagLayout = mInflater.inflate(R.layout.mail_tagview_item, null)
             tagLayout.id = listIndex
             if (item.isEmailOk) {
                 tagLayout.setBackgroundResource(tagNormalLayoutBg)
@@ -396,6 +397,7 @@ open class TagView @JvmOverloads constructor(
     /**
      * AutoCompleteTextView未独占一行时，字符输入到达末尾即自动换行
      */
+    @SuppressLint("NewApi")
     private fun dynamicChangeAutoCompleteTextViewToBelow() {
         if (mAutoCompleteParams!!.getRule(BELOW) != 0 || isFirstInput) {
             return

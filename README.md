@@ -86,4 +86,4 @@
 
 ##### 类图
 
-![类图](./MailField4.png)
+![类图](./MailField4.jpg)
