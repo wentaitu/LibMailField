@@ -228,7 +228,8 @@ class EmailTagView @JvmOverloads
      */
     fun changeFocusAutoAddTag() {
         if (!TextUtils.isEmpty(mAutoTv.text.toString())) {
-            val completeText = mAutoTv.text.toString() + mRecipientLimit
+            val completeText = mAutoTv.text.toString() + mRecipientLimit.orEmpty()
+
             addNewEmailTag(completeText)
             mAutoTv.setText("")
             updateEmailTagStatus()
