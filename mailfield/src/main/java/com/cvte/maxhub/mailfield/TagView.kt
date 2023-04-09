@@ -20,10 +20,10 @@ import com.cvte.maxhub.mailfield.view.TouchTextView.OnClickViewListener
 import kotlin.math.min
 
 /**
+ * 邮件地址框RelativeLayout，内部包含各个子Tag
+ *
  * @author tuwentai
- * @email i_tuwentai@cvte.com
  * @date 2020-03-25
- * @description: 邮件地址框RelativeLayout，内部包含各个子Tag
  */
 open class TagView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0

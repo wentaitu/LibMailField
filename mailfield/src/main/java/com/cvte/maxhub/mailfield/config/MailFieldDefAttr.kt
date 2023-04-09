@@ -4,10 +4,10 @@ import android.graphics.Color
 import com.cvte.maxhub.mailfield.R
 
 /**
+ * 邮件输入框默认样式，若需配置属性，使用xml配置即可
+ *
  * @author tuwentai
- * @email i_tuwentai@cvte.com
  * @date 2020-03-25
- * @description: 邮件输入框默认样式，若需配置属性，使用xml配置即可
  */
 object MailFieldDefAttr {
 

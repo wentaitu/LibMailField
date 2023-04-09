@@ -14,11 +14,10 @@ import com.cvte.maxhub.mailfield.view.MaxHeightScrollView
 import kotlinx.android.synthetic.main.layout_mail_address_field.view.*
 
 /**
- * @author: linrunyu
- * @email linrunyu@cvte.com
- * @date 2019-09-20
- * @description: 继承邮件地址框TagView，实现外部调用公共方法
- * 如：添加地址、获取所有地址、清空地址等
+ * 继承邮件地址框TagView，实现外部调用公共方法 如：添加地址、获取所有地址、清空地址等
+ *
+ * @author: tuwentai
+ * @date 2020-03-20
  */
 class EmailTagView @JvmOverloads
         constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :

@@ -9,10 +9,10 @@ import com.cvte.maxhub.mailfield.R
 import com.cvte.maxhub.mailfield.config.MailFieldDefAttr
 
 /**
- * @author heronghu
- * @email heronghu@cvte.com
- * @date 2018/4/19
- * @description: 最大高度ScrollView
+ * 最大高度ScrollView
+ *
+ * @author tuwentai
+ * @date 2020/3/19
  */
 class MaxHeightScrollView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
@@ -41,6 +41,8 @@ class MaxHeightScrollView @JvmOverloads constructor(
     /**
      * 解决滑动冲突：MaxHeightScrollView高度已到达最高，内部子控件可滑动，
      * 且外层布局也可滑动时，禁止外部滑动
+     *
+     * todo 邮件ScrollView滑动到底部应该允许外部布局可滑动(邮件框外层也可滑动的情况)
      */
     override fun onInterceptTouchEvent(event: MotionEvent): Boolean {
         if (measuredHeight >= mMaxHeight) {
